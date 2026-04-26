@@ -94,6 +94,12 @@
     <Compile Include="FGraphics.Designer.cs">
       <DependentUpon>FGraphics.cs</DependentUpon>
     </Compile>
+    <Compile Include="FMultipleWave.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FMultipleWave.Designer.cs">
+      <DependentUpon>FMultipleWave.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +110,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FGraphics.resx">
       <DependentUpon>FGraphics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FMultipleWave.resx">
+      <DependentUpon>FMultipleWave.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

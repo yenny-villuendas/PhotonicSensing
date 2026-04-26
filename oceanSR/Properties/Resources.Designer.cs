@@ -59,5 +59,15 @@ namespace oceanSR.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Byte[].
+        /// </summary>
+        internal static byte[] user_manual {
+            get {
+                object obj = ResourceManager.GetObject("user_manual", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

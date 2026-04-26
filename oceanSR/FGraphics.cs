@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using static oceanSR.Form1;
 
 namespace oceanSR
 {
@@ -58,9 +59,13 @@ namespace oceanSR
         private void InitializeSignalGraphic()
         {
             chart2.Titles.Add("Pixels (a.u)");
+            // Built-in choices include Pastel, EarthTones, Chocolate, Fire, SeaGreen, etc.
+            chart2.Palette = ChartColorPalette.Pastel;
+
             chart2.Series[0].ChartType = SeriesChartType.Line;
-            chart2.Series[0].IsVisibleInLegend = false;
-            chart2.Series[0].Color = Color.Red;
+
+            //chart2.Series[0].IsVisibleInLegend = false;
+            //chart2.Series[0].Color = Color.Red;
 
             var chartArea = chart2.ChartAreas[0];
 
@@ -77,7 +82,7 @@ namespace oceanSR
         {
             chart3.Titles.Add("Monitoring phase");
             chart3.Series[0].ChartType = SeriesChartType.Line;
-            chart3.Series[0].IsVisibleInLegend = false;
+            //chart3.Series[0].IsVisibleInLegend = false;
             chart3.Series[0].Color = Color.Blue;
 
             var chartArea = chart3.ChartAreas[0];
@@ -95,8 +100,8 @@ namespace oceanSR
 
         public List<double> xFourier = new List<double>();
         public List<double> yFourier = new List<double>();
-        public List<double> xSignal = new List<double>();
-        public List<double> ySignal = new List<double>();
+        //public List<double> xSignal = new List<double>();
+        //public List<double> ySignal = new List<double>();
         public List<double> xPhase = new List<double>();
         public List<double> yPhase = new List<double>();
         public List<double> xSpectra = new List<double>();
@@ -104,11 +109,13 @@ namespace oceanSR
         public List<double> xSpectraSelected = new List<double>();
         public List<double> ySpectraSelected = new List<double>();
 
+        public Dictionary<string, MyContainer> chartDic_signals = new Dictionary<string, MyContainer>();
+        public Dictionary<string, MyContainer> chartDic_signals_hist = new Dictionary<string, MyContainer>();
 
         public List<double> xFourier_hist = new List<double>();
         public List<double> yFourier_hist = new List<double>();
-        public List<double> xSignal_hist = new List<double>();
-        public List<double> ySignal_hist = new List<double>();
+        //public List<double> xSignal_hist = new List<double>();
+        //public List<double> ySignal_hist = new List<double>();
         public List<double> xPhase_hist = new List<double>();
         public List<double> yPhase_hist = new List<double>();
         public string path;
@@ -132,8 +139,9 @@ namespace oceanSR
                 try
                 {
                     SaveCSV(path + @"/Spectrum " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".csv", "Wavelenght, Count (a.u.)", xSpectra, ySpectra);
-                    SaveCSV(path + @"/Signal " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".csv", "Time (ms), Sensor Signal", xSignal_hist, ySignal_hist);
                     SaveCSV(path + @"/Phase " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".csv", "Time (ms), Phase", xPhase_hist, yPhase_hist);
+                    foreach (string key in chartDic_signals.Keys)
+                        SaveCSV(path + @"/Signal " + key + " " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".csv", "Time (ms), Sensor Signal", chartDic_signals_hist[key].xAxis, chartDic_signals_hist[key].yAxis);
                     MessageBox.Show("Data saved succesfully");
                 }
                 catch { }
@@ -146,8 +154,9 @@ namespace oceanSR
                     chart2.SaveImage(path + @"/Signal " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".png", ChartImageFormat.Png);
                     chart3.SaveImage(path + @"/Phase " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".png", ChartImageFormat.Png);
                     SaveCSV(path + @"/Spectrum " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".csv", "Wavelenth, Count (a.u.)", xSpectra, ySpectra);
-                    SaveCSV(path + @"/Signal " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".csv", "Time (ms), Sensor Signal", xSignal_hist, ySignal_hist);
                     SaveCSV(path + @"/Phase " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".csv", "Time (ms), Phase", xPhase_hist, yPhase_hist);
+                    foreach (string key in chartDic_signals.Keys)
+                        SaveCSV(path + @"/Signal " + key + " " + customName + DateTime.Now.ToString("yyyy-MM-dd_HH-mm") + ".csv", "Time (ms), Sensor Signal", chartDic_signals_hist[key].xAxis, chartDic_signals_hist[key].yAxis);
 
                     MessageBox.Show("Images and data saved succesfully!");
                 }
@@ -225,6 +234,14 @@ namespace oceanSR
                     checkBox1.Enabled = true;
                 }
             }
+        }
+
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (e.NewValue == CheckState.Checked)
+                foreach (int index in checkedListBox1.CheckedIndices)
+                    if (index != e.Index)
+                        checkedListBox1.SetItemChecked(index, false);
         }
     }
 
